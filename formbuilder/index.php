@@ -22,7 +22,7 @@ if (!empty($_GET['clear'])) {
 </form>
 
 <form>
-  <form action="index.php" method="GET">
+  <form action="index.php">
     <input type="hidden" name="clear_form" value="true">
     <input type="submit" value="Clear form">
 </form>
