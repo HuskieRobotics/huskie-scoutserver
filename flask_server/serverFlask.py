@@ -7,16 +7,22 @@
 
 
 from flask import Flask
-from flask import render_template
+from flask import render_template,request
+from formthing import ContactForm
 app = Flask(__name__)
+app.secret_key = 'development key'
 
 @app.route('/')
 def hello_world():
     return """This is the home page\n\t Please add a /form to the url to get to the scouting form"""
 
-@app.route('/form')
+@app.route('/form', methods = ["POST","GET"])
 def enterData():
-    return render_template("webform.html")
+    if request.method == 'POST':
+        print("recieved POST")
+        return (request.form['firstname'])
+    else:
+        return render_template("webform.html")
 
 
 if __name__ == "__main__":

@@ -1,10 +1,5 @@
-from wtforms import Form, TextField, validators
+from flask_wtf import Form
+from wtforms import TextField,IntegerField,SubmitField,SelectField
 
-class CreateAuthorForm(Form):
-    names = TextField('Names', [validators.Length(min=5, max=70)])
-
-
-class AuthorForm(Form):
-    name = TextField('Name')
-    
-    https://damyanon.net/flask-series-views/
+class ContactForm(Form):
+    name = TextField("name of student")
