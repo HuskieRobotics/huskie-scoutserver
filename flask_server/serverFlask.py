@@ -5,10 +5,11 @@
 #now you can run this file by using: python3 serverFlask.py
 #to access the website use 127.0.0.1:5000 and follow the instructions
 
-
+import csv
 from flask import Flask
 from flask import render_template,request
-from formthing import ContactForm
+#from formthing import ContactForm
+
 app = Flask(__name__)
 app.secret_key = 'development key'
 
@@ -20,10 +21,13 @@ def hello_world():
 def enterData():
     if request.method == 'POST':
         print("recieved POST")
-        return (request.form['firstname'])
+        with open('scoutingData.csv','w',newline = '') as f:
+            writer = csv.writer(f,delimiter= ',')
+            print (writer)
+            writer.writerow([request.form['lastname'],request.form['firstname']])
+        return ("Things happened")
     else:
         return render_template("webform.html")
-
 
 if __name__ == "__main__":
     app.run()
