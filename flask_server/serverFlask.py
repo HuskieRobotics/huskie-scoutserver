@@ -7,27 +7,26 @@
 
 import csv
 from flask import Flask
-from flask import render_template,request
+from flask import render_template,request,redirect
 #from formthing import ContactForm
 
 app = Flask(__name__)
 app.secret_key = 'development key'
 
 @app.route('/')
-def hello_world():
-    return """This is the home page\n\t Please add a /form to the url to get to the scouting form"""
-
 @app.route('/form', methods = ["POST","GET"])
 def enterData():
     if request.method == 'POST':
-        print("recieved POST")
-        with open('scoutingData.csv','w',newline = '') as f:
+        with open('scoutingData.csv','a',newline = '') as f:
             writer = csv.writer(f,delimiter= ',')
-            print (writer)
             writer.writerow([request.form['lastname'],request.form['firstname']])
-        return ("Things happened")
-    else:
-        return render_template("webform.html")
+            return redirect('/other')
+    return render_template("webform.html")
 
+@app.route('/other',methods = ["POST","GET"])
+def other():
+    if request.method == 'POST':
+        return redirect('/form')
+    return render_template("other.html")
 if __name__ == "__main__":
     app.run()
