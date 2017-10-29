@@ -20,13 +20,27 @@ def enterData():
         with open('scoutingData.csv','a',newline = '') as f:
             writer = csv.writer(f,delimiter= ',')
             writer.writerow([request.form['lastname'],request.form['firstname']])
-            return redirect('/other')
+            return redirect('/submitted')
     return render_template("webform.html")
 
-@app.route('/other',methods = ["POST","GET"])
-def other():
+@app.route('/submitted',methods = ["POST","GET"])
+def submitted():
     if request.method == 'POST':
         return redirect('/form')
-    return render_template("other.html")
+    return render_template("submitted.html")
+
+@app.route('/master', methods = ["POST","GET"])
+def master():
+    csvData = {}
+    if request.method == 'POST':
+        open('scoutingData.csv', 'w').close()
+        return render_template("master.html",csvData = csvData)
+    else:
+        with open('scoutingData.csv') as csvFile:
+            reader = csv.reader(csvFile,delimiter=",")
+            for row in reader:
+                csvData[row[0]] = row[1:]
+            return render_template("master.html", csvData = csvData)
+
 if __name__ == "__main__":
     app.run()
