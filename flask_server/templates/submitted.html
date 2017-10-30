@@ -1,6 +1,10 @@
-<form action="{{url_for('submitted')}}" method="POST">
-  Congratulations! Your data was submitted to the scoutingData.csv file<br>
-  Check it to see the entered data
-  <br>Click this to go back:<br>
+<html>
+  <head><h1> Congratulations!</h1></head>
+    <body><br>
+      Your form was submitted<br>
+      <form action="{{url_for('submitted')}}" method="POST">
+  <br>Click this for the next match:<br>
   <input type="submit" value="Go Back"><br>
 </form>
+    </body>
+</html>

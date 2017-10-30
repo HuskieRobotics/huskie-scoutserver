@@ -1,4 +1,4 @@
-import csv
+import csv,datetime
 from flask import Flask
 from flask import render_template,request,redirect,send_file
 from operator import itemgetter, attrgetter
@@ -57,7 +57,9 @@ def master():
         if request.form['btn'] == "Clear":
             return redirect('/clear')
         elif request.form['btn'] == "Download CSV":
-            return send_file('scoutingData.csv',mimetype='text/csv',attachment_filename='somegooddata.csv', as_attachment=True)
+            now = datetime.datetime.now()
+            fileName = "scoutingData"+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+".csv"
+            return send_file('scoutingData.csv',mimetype='text/csv',attachment_filename=fileName, as_attachment=True)
     return render_template("master.html",csvData = getCSVData())
 
 if __name__ == "__main__":
