@@ -1,0 +1,17 @@
+<html>
+<head> Data Entry </head>
+  <body>
+    <form action="{{ url_for('enterData') }}" method="POST">
+      Match Number:<br>
+      <input type="number" name="matchNumber"><br>
+      Team Number:<br>
+      <input type="number" name="teamNumber"><br>
+      Points Scored:<br>
+      <input type="number" name="points"><br>
+      Comments:<br>
+      <input type="text" name="comments"><br>
+      Submit:<br>
+      <input type="submit" name="btn" value="Submit Form">
+    </form>
+  </body>
+</html>

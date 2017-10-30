@@ -1,27 +1,23 @@
-#Hey Gavin
-#first install python 3 on ur computer
-#then install pip3
-#then run sudo pip install flask
-#now you can run this file by using: python3 serverFlask.py
-#to access the website use 127.0.0.1:5000 and follow the instructions
-
 import csv
 from flask import Flask
-from flask import render_template,request,redirect
-#from formthing import ContactForm
+from flask import render_template,request,redirect,send_file
+from operator import itemgetter, attrgetter
 
 app = Flask(__name__)
 app.secret_key = 'development key'
+password = 'nnhs3061'
 
 @app.route('/')
 @app.route('/form', methods = ["POST","GET"])
 def enterData():
     if request.method == 'POST':
-        with open('scoutingData.csv','a',newline = '') as f:
-            writer = csv.writer(f,delimiter= ',')
-            writer.writerow([request.form['lastname'],request.form['firstname']])
-            return redirect('/submitted')
-    return render_template("webform.html")
+        if request.form['btn'] == "Submit Form":
+            with open('scoutingData.csv','a',newline = '') as csvFile:
+                values = [request.form["matchNumber"],request.form["teamNumber"],request.form["points"],request.form["comments"]]
+                writer = csv.writer(csvFile,delimiter= ',')
+                writer.writerow(values)
+                return redirect('/submitted')
+    return render_template("dataform.html")
 
 @app.route('/submitted',methods = ["POST","GET"])
 def submitted():
@@ -29,18 +25,40 @@ def submitted():
         return redirect('/form')
     return render_template("submitted.html")
 
+def getCSVData():
+    csvData = []
+    with open('scoutingData.csv') as csvFile:
+        reader = csv.reader(csvFile,delimiter=",")
+        for row in reader:
+            csvData.append(row)
+    return csvData
+def clearCSVData():
+    csv_headings = []
+    with open('scoutingData.csv') as csvFile:
+        reader = csv.reader(csvFile,delimiter=",")
+        csv_headings = next(reader)
+    open('scoutingData.csv', 'w').close()
+    with open('scoutingData.csv', 'a',newline='') as csvFile:
+        writer = csv.writer(csvFile,delimiter=',')
+        writer.writerow(csv_headings)
+
+@app.route('/clear',methods=["POST","GET"])
+def clear():
+    if request.method =="POST":
+        if request.form['btn'] == "Enter Password":
+            if request.form['password'] == password:
+                clearCSVData()
+        return redirect('/master')
+    return render_template("clear.html")
+
 @app.route('/master', methods = ["POST","GET"])
 def master():
-    csvData = {}
     if request.method == 'POST':
-        open('scoutingData.csv', 'w').close()
-        return render_template("master.html",csvData = csvData)
-    else:
-        with open('scoutingData.csv') as csvFile:
-            reader = csv.reader(csvFile,delimiter=",")
-            for row in reader:
-                csvData[row[0]] = row[1:]
-            return render_template("master.html", csvData = csvData)
+        if request.form['btn'] == "Clear":
+            return redirect('/clear')
+        elif request.form['btn'] == "Download CSV":
+            return send_file('scoutingData.csv',mimetype='text/csv',attachment_filename='somegooddata.csv', as_attachment=True)
+    return render_template("master.html",csvData = getCSVData())
 
 if __name__ == "__main__":
     app.run()
