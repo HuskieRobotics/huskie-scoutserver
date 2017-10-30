@@ -60,6 +60,14 @@ def master():
             now = datetime.datetime.now()
             fileName = "scoutingData"+str(now.month)+str(now.day)+str(now.hour)+str(now.minute)+".csv"
             return send_file('scoutingData.csv',mimetype='text/csv',attachment_filename=fileName, as_attachment=True)
+        elif request.form['btn'] == "Sort by Team Number":
+            sortedData = sorted(getCSVData()[1:], key=itemgetter(1))
+            sortedData.insert(0,getCSVData()[0])
+            return render_template("master.html",csvData = sortedData )
+        elif request.form['btn'] == "Sort by Match Number":
+            sortedData = sorted(getCSVData()[1:], key=itemgetter(0))
+            sortedData.insert(0,getCSVData()[0])
+            return render_template("master.html",csvData = sortedData )
     return render_template("master.html",csvData = getCSVData())
 
 if __name__ == "__main__":
