@@ -1,4 +1,4 @@
-import csv,datetime
+import csv,datetime,re
 from flask import Flask
 from flask import render_template,request,redirect,send_file
 from operator import itemgetter, attrgetter
@@ -68,6 +68,23 @@ def master():
             sortedData = sorted(getCSVData()[1:], key=itemgetter(0))
             sortedData.insert(0,getCSVData()[0])
             return render_template("master.html",csvData = sortedData )
+        elif request.form['btn'] == "Cancel":
+            return redirect('/master')
+        elif request.form['btn']=="Apply Edits":
+            #clearCSVData()
+            with open('scoutingData.csv', 'a',newline='') as csvFile:
+                clearCSVData()
+                writer = csv.writer(csvFile,delimiter=',')
+                csvList = []
+                for key, value in request.form.items():
+                    rowCol = re.findall('\d+', key)
+                    if len(rowCol) > 0:
+                        csvList.append([int(rowCol[0]), int(rowCol[1]) ,value])
+                csvList = sorted(csvList, key=itemgetter(0,1))
+                while len(csvList) > 0:
+                    print (csvList)
+                    writer.writerow([csvList.pop(0)[2],csvList.pop(0)[2],csvList.pop(0)[2],csvList.pop(0)[2]])
+            return redirect('/master')
     return render_template("master.html",csvData = getCSVData())
 
 if __name__ == "__main__":

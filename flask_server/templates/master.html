@@ -1,15 +1,27 @@
 <head><h1> Master Page </h1></head>
   <body>
     <h2>DATA:</h2><br>
-    <table border = 1>
-      {% for data in csvData %}
+    <form action="{{url_for('master')}}" method="POST">
+      <table border = 1>
         <tr>
-          {% for value in data%}
-          <th> {{value}} </th>
-          {% endfor %}
+          {% for data in csvData[0] %}
+            <th> {{data}} </th>
+          {%endfor%}
         </tr>
-      {% endfor %}
-    </table>
+
+        {% for data in csvData[1:] %}
+          <tr>
+            {% set row = loop.index %}
+            {% for value in data[:3]%}
+              <th> <input type="number" value="{{value}}" name="{{row,loop.index-1}}"> </th>
+            {% endfor %}
+            <th> <input type="text" value={{data[3]}} name="{{row,3}}"></th>
+          </tr>
+        {% endfor %}
+      </table>
+      <input type="submit" name="btn" value="Apply Edits">
+      <input type="submit" name="btn" value="Cancel">
+    </form>
 
     <br><br><h2>OPERATIONS:</h2><br>
     <form action = "{{url_for('master')}}" method = "POST">
