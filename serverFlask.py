@@ -81,9 +81,10 @@ def master():
                     if len(rowCol) > 0:
                         csvList.append([int(rowCol[0]), int(rowCol[1]) ,value])
                 csvList = sorted(csvList, key=itemgetter(0,1))
+                print(csvList)
                 while len(csvList) > 0:
-                    print (csvList)
-                    writer.writerow([csvList.pop(0)[2],csvList.pop(0)[2],csvList.pop(0)[2],csvList.pop(0)[2]])
+                    row = [csvList.pop(0)[2],csvList.pop(0)[2],csvList.pop(0)[2],csvList.pop(0)[2]]
+                    writer.writerow(row)
             return redirect('/master')
     return render_template("master.html",csvData = getCSVData())
 
