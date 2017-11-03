@@ -15,7 +15,7 @@
             {% for value in data[:3]%}
               <th> <input type="number" value="{{value}}" name="{{row,loop.index-1}}"> </th>
             {% endfor %}
-            <th> <input type="text" value={{data[3]}} name="{{row,3}}"></th>
+            <th> <input type="text" value="{{data[3]}}" name="{{row,3}}"style='width:100%'></th>
           </tr>
         {% endfor %}
       </table>

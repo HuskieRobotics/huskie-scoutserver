@@ -71,7 +71,7 @@ def master():
         elif request.form['btn'] == "Cancel":
             return redirect('/master')
         elif request.form['btn']=="Apply Edits":
-            #clearCSVData()
+            clearCSVData()
             with open('scoutingData.csv', 'a',newline='') as csvFile:
                 clearCSVData()
                 writer = csv.writer(csvFile,delimiter=',')
@@ -79,11 +79,16 @@ def master():
                 for key, value in request.form.items():
                     rowCol = re.findall('\d+', key)
                     if len(rowCol) > 0:
-                        csvList.append([int(rowCol[0]), int(rowCol[1]) ,value])
+                        print(value)
+                        csvList.append([int(rowCol[0]), int(rowCol[1]) ,str(value)])
                 csvList = sorted(csvList, key=itemgetter(0,1))
-                print(csvList)
+                #print(csvList)
                 while len(csvList) > 0:
-                    row = [csvList.pop(0)[2],csvList.pop(0)[2],csvList.pop(0)[2],csvList.pop(0)[2]]
+                    match=csvList.pop(0)
+                    team = csvList.pop(0)
+                    points = csvList.pop(0)
+                    comments = csvList.pop(0)
+                    row = [match[2], team[2], points[2], comments[2]]
                     writer.writerow(row)
             return redirect('/master')
     return render_template("master.html",csvData = getCSVData())
